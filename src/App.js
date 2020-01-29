@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import CompositionScreen from './Components/Canvas';
+import api from './services/api';
+import Canvas from './Components/Canvas';
 import './App.css';
 
 function App() {
@@ -9,10 +10,18 @@ function App() {
   const [verticalPosition, setVerticalPosition] = useState('');
   const [horizontalPosition, setHorizontalPosition] = useState('');
 
+  const pixabayKey = '8387701-5e4e7d3a7ec1162dbcc87ac47';
+
+  async function handleImageBackground() {
+    const response = await api.get(`?key=${pixabayKey}&q=yellow+flowers&image_type=photo&pretty=true`);
+    console.log(response.data);
+  };
+
   return (
     <div className="App">
 
-      <header>
+      <header className="header">
+        <button onClick={() => handleImageBackground()}>Buscar na API Backgrounds</button>
         <div className="group">
           <label>Título</label>
           <input onChange={e => setTitle(e.target.value)} type="text" value={title} />
@@ -22,21 +31,21 @@ function App() {
           <input onChange={e => setSubtitle(e.target.value)} type="text" value={subtitle} />
         </div>
         <div className="group">
-          <label>Posição Vertical</label>
+          <label>Texto Vertical</label>
           <select onChange={e => setVerticalPosition(e.target.value)} type="text" value={verticalPosition}>
-            <option value="">Selecione</option>
-            <option value="flex-start">Topo</option>
-            <option value="center">Meio</option>
-            <option value="flex-end">Baixo</option>
+            <option value="">Selecione a posição</option>
+            <option value="flex-start">Em cima</option>
+            <option value="center">No centro</option>
+            <option value="flex-end">Em baixo</option>
           </select>
         </div>
         <div className="group">
-          <label>posição Horizontal</label>
+          <label>Texto Horizontal</label>
           <select onChange={e => setHorizontalPosition(e.target.value)} type="text" value={horizontalPosition}>
-            <option value="">Selecione</option>
-            <option value="left">Esquerda</option>
-            <option value="center">Centro</option>
-            <option value="right">Direita</option>
+            <option value="">Selecione a posição</option>
+            <option value="left">Na esquerda</option>
+            <option value="center">No centro</option>
+            <option value="right">Na direita</option>
           </select>
         </div>
       </header>
