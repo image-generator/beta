@@ -7,6 +7,7 @@ import imageLandScape from './images/landscape.svg';
 import ModalBackground from './Components/ModalBackground';
 import { Switch, Slider } from '@material-ui/core';
 import { SketchPicker } from 'react-color';
+import OverlayFilter from './Components/OverlayFilter';
 
 function App() {
 
@@ -22,9 +23,9 @@ function App() {
   const [panel, setPanel] = useState({
     filter: true,
   });
-  const [filterColor, setFilterColor] = useState('');
+  const [filterColor, setFilterColor] = useState('#FFF');
   const [displayColorPicker, setDisplayColorPicker] = useState(false);
-  const [filterValue, setFilterValue] = useState(20);
+  const [filterOpacity, setFilterOpacity] = useState(0.2);
 
   useEffect(() => {
     localStorage.setItem('background', '')
@@ -34,7 +35,7 @@ function App() {
 
   const handleCategoriesQuery = (categories) => {
     const handleArray = [];
-    const query = categories.map(item => {
+    categories.map(item => {
       handleArray.push(item.value);
       return handleArray;
     });
@@ -76,21 +77,19 @@ function App() {
   };
 
   const handleOpenColorPicker = () => {
-    setDisplayColorPicker(!displayColorPicker);
+    if (panel.filter) {
+      setDisplayColorPicker(!displayColorPicker);
+    }
   };
 
   const handleCloseColorPicker = () => {
-    console.log('handleCloseColorPicker')
     setDisplayColorPicker(false);
   };
 
   const handleChangeFilterValue = (event, newValue) => {
-    setFilterValue(newValue);
+    setFilterOpacity(newValue);
   };
 
-  function valuetext(value) {
-    return `${value}°C`;
-  }
 
   return (
     <div className="App">
@@ -128,7 +127,7 @@ function App() {
           <div className="panelWrapper">
 
             <aside className="aside">
-              <div className="filtro">
+              <div className="aside-item">
                 <span className="aside-title">Filtro</span>
 
                 <div className="asideFilterWrapper">
@@ -142,7 +141,7 @@ function App() {
                       inputProps={{ 'aria-label': 'primary checkbox' }}
                     />
                     <div className="swatch" onClick={handleOpenColorPicker}>
-                      <div className="color" style={{ background: filterColor }} />
+                      <div className="color" style={{ background: panel.filter ? filterColor : '#e0e0e0' }} />
                     </div>
                     {displayColorPicker ? (
                       <div className="popover">
@@ -155,24 +154,31 @@ function App() {
                     ) : null}
                   </div>
                   <Slider
-                    value={filterValue}
+                    disabled={!panel.filter}
+                    value={filterOpacity}
                     min={0}
-                    step={1}
-                    max={100}
-                    getAriaValueText={valuetext}
+                    step={0.1}
+                    max={1}
                     onChange={handleChangeFilterValue}
                     valueLabelDisplay="auto"
                     aria-labelledby="discrete-slider"
                   />
                 </div>
-                  
-
               </div>
+              <div className="aside-item item-middle">
+                <span className="aside-title">Texto</span>
+              </div>
+
             </aside>
 
             <div className="panel">
               <div className={`${'canvas'} ${type === 'horizontal' ? 'portrait' : 'landscape'}`} style={{ background: `url('${localStorage.getItem('background')}')`, backgroundSize: 'cover' }}>
-              
+                {panel.filter && (
+                  <OverlayFilter
+                    color={filterColor}
+                    opacity={filterOpacity}
+                  />
+                )}
               </div>
             </div>
             
