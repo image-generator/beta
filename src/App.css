@@ -7,6 +7,67 @@
   flex-direction: column;
   position: relative;
 }
+.aside {
+  width: 340px;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: #efefef;
+  overflow-x: hidden;
+    overflow-y: auto;
+    padding: 24px;
+    z-index: 2;
+  box-shadow: 0 1px 5px 0 rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.12);
+}
+.aside-title {
+  margin: 0 0 8px;
+  color: rgba(0,0,0,.87);
+  font-size: 13px;
+  display: block;
+  font-weight: 500;
+  text-align: left;
+}
+.asideFilterWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.switchColor {
+  display: flex;
+  align-items: center;
+  margin-right: 25px;
+}
+.color {
+  width: 20px;
+  height: 15px;
+  border-radius: 2px;
+}
+.switch {
+  margin-left: -12px;
+  margin-right: 5px;
+}
+.swatch {
+  padding: 3px;
+  background: #fff;
+  border-radius: 1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px;
+  display: inline-block;
+  cursor: pointer;
+}
+.popover {
+  top: 0;
+  position: absolute;
+  z-index: 2;
+}
+.cover {
+  position: fixed;
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px;
+}
+
+
+
 .header {
   width: 100%;
   display: flex;
@@ -20,6 +81,21 @@
   align-items: flex-start;
 }
 
+.panelWrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.panel {
+  width: 100%;
+  height: 100vh;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #e0e0e0;
+}
 .canvas-wrapper {
   width: 100%;
   height: 100%;
@@ -32,7 +108,7 @@
   align-items: center;
   flex-direction: column;
 }
-.canvasWrapper span {
+.canvas-title {
   display: inline-block;
   margin-bottom: 30px;
   font-size: 20px;
@@ -40,6 +116,7 @@
 .canvas {
   background-color: #d8d8d8;
   border: 1px solid #b5b5b5;
+  background-size: cover !important;
 }
 .reset {
   outline: none;
@@ -75,11 +152,11 @@
 }
 
 .portrait {
-  width: 600px;
-  height: 600px;
+  width: 500px;
+  height: 500px;
 }
 
 .landscape {
-  width: 337px;
-  height: 600px;
+  width: 237px;
+  height: 500px;
 }

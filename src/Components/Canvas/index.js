@@ -7,8 +7,6 @@ const Canvas = ({ title, subtitle, verticalPosition, horizontalPosition }) => {
     const showTitle = true;
     const showSubtitle = true;
 
-    console.log(verticalPosition, horizontalPosition);
-
     // Position
     const position = 'centerCenter';
     const titleColor = '#FFF';

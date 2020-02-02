@@ -13,7 +13,6 @@ const ModalBackground = ({ backgrounds, onClick }) => {
             <div className="modal">
                 {backgrounds.map(bg => (
                     <div key={bg.id} className="card" onClick={(e) => handleClick(e, bg.largeImageURL)}>
-                        {console.log(bg)}
                         <img src={bg.largeImageURL} alt=""/>
                     </div>
                 ))}
