@@ -17,3 +17,25 @@
 .inputsWrapper form button {
     width: 240px;
 }
+.select {
+    width: 100%;
+}
+.dialog {
+    min-width: 600px;
+}
+.chipWrapper {
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+.chip {
+    margin: 3px;
+}
+.footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 25px 25px 0;
+}
