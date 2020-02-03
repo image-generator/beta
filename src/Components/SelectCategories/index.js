@@ -4,7 +4,7 @@ import './styles.css';
 import { Chip, Dialog, DialogTitle, DialogContent, DialogContentText, Button, DialogActions, FormControl, InputLabel, MenuItem, Select, Checkbox, ListItemText, TextField } from '@material-ui/core';
 
 
-const Categories = ({ onSubmit }) => {
+const SelectCategories = ({ onSubmit }) => {
     const [selectedOption, setSelectedOption] = useState([]);
     const [open, setOpen] = React.useState(true);
 
@@ -72,4 +72,4 @@ const Categories = ({ onSubmit }) => {
     );
 };
 
-export default Categories;
+export default SelectCategories;
