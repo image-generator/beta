@@ -20,3 +20,5 @@ export const options = [
     { value: 'business', label: 'Negócios', active: false },
     { value: 'music', label: 'Música', active: false },
 ];
+
+export const pixabayKey = '8387701-5e4e7d3a7ec1162dbcc87ac47';
