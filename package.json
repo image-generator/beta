@@ -4,16 +4,22 @@
 	"private": true,
 	"homepage": "https://image-generator.github.io/beta",
   "dependencies": {
+    "@material-ui/core": "^4.9.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.19.2",
+    "immutability-helper": "^3.0.1",
     "gh-pages": "^2.2.0",
     "react": "^16.12.0",
+    "react-color": "^2.18.0",
+    "react-dnd": "^10.0.2",
+    "react-dnd-html5-backend": "^10.0.2",
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0",
     "react-select": "^3.0.8",
-    "react-widgets": "^4.4.11"
+    "react-widgets": "^4.4.11",
+    "shortid": "^2.2.15"
   },
   "scripts": {
     "start": "react-scripts start",

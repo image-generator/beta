@@ -1,110 +1,233 @@
 import React, { useState, useEffect } from 'react';
 import api from './services/api';
-import Canvas from './Components/Canvas';
-import './App.css';
-import Categories from './Components/Categories';
-import imagePortrait from './images/portrait.svg';
-import imageLandScape from './images/landscape.svg';
+import SelectCategories from './Components/SelectCategories';
+import SelectOrientation from './Components/SelectOrientation';
+
 import ModalBackground from './Components/ModalBackground';
+import { Switch, Slider, TextField, Button } from '@material-ui/core';
+import { SketchPicker } from 'react-color';
+import OverlayFilter from './Components/OverlayFilter';
+import DragAndDropText from './Components/DragAndDropText';
+import shortid from 'shortid';
+import { pixabayKey } from './config';
+import { categoriesToQuery } from './utils/categoriesToQuery';
+
+import { DndProvider } from 'react-dnd';
+import Backend from 'react-dnd-html5-backend';
+
+import './App.css';
 
 function App() {
 
-  const [format, setFormat] = useState(false);
-  const [modalBackground, setModalBackground] = useState(false);
-  const [modalCategories, setCategories] = useState(false);
+  const [showSelectOrientation, setShowSelectOrientation] = useState(true);
+  const [showModalCategories, setShowModalCategories] = useState(false);
+  const [showPanel, setShowPanel] = useState(false);
+  const [showModalBackground, setShowModalBackground] = useState(false);
   const [backgrounds, setBackgrounds] = useState('');
-  const [type, setType] = useState('');
   const [orientation, setOrientation] = useState('');
+
+  const [boxes, setBoxes] = useState([])
+
+  // Painel
+  const [panel, setPanel] = useState({
+    filter: true,
+    text: false,
+  });
+
+  const [filterColor, setFilterColor] = useState('#FFF');
+  const [filterOpacity, setFilterOpacity] = useState(0.2);
+  const [displayColorPicker, setDisplayColorPicker] = useState(false);
+
 
   useEffect(() => {
     localStorage.setItem('background', '')
   }, [])
-
-  const portrait = {
-    width: '600px',
-    height: '600px',
-    background: localStorage.getItem('background'),
-  };
-
-  const landscape = {
-    width: '337px',
-    height: '600px',
-    background: localStorage.getItem('background'),
-  };
   
 
-  const pixabayKey = '8387701-5e4e7d3a7ec1162dbcc87ac47';
-
   async function handleImageBackground(data) {
-    console.log(data);
-    console.log('backgrounds', backgrounds)
     if (backgrounds === '') {
-      const response = await api.get(`?key=${pixabayKey}&q=${data.selectedOption.value}&orientation=${orientation}&image_type=photo&pretty=true`);
+      const response = await api.get(`?key=${pixabayKey}&q=${categoriesToQuery(data.selectedOption)}&orientation=${orientation}&image_type=photo&pretty=true`);
       setBackgrounds(response.data.hits);
-      setModalBackground(true);
-      console.log(response.data);
+      setShowModalBackground(true);
+      setShowPanel(true);
     }
-
   };
 
-
-  const handleType = (typeImage) => {
-    typeImage === 'horizontal' ? setType('horizontal') : setType('vertical');
-    setOrientation(typeImage);
-    setFormat(true);
-    setCategories(true);
+  const handleOrientation = (orientation) => {
+    setOrientation(orientation);
+    setShowSelectOrientation(false);
+    setShowModalCategories(true);
   }
 
-  function handlClick() {
-    setModalBackground(false)
-    setCategories(false);
-    console.log()
+  const handleCloseBackgrounds = () => {
+    setShowModalBackground(false)
+    setShowModalCategories(false);
   };
 
   const reset = () => {
-    setFormat(false);
+    setShowSelectOrientation(true);
+  };
+
+  const handlePanel = name => event => {
+    setPanel({ ...panel, [name]: event.target.checked });
+  };
+
+  const handleFilterColor = (color) => {
+    setFilterColor(color.hex);
+  };
+
+  const handleOpenColorPicker = () => {
+    if (panel.filter) {
+      setDisplayColorPicker(!displayColorPicker);
+    }
+  };
+
+  const handleCloseColorPicker = () => {
+    setDisplayColorPicker(false);
+  };
+
+  const handleChangeFilterValue = (event, newValue) => {
+    setFilterOpacity(newValue);
+  };
+
+  const handleChangeText = (event, index) => {
+    const newBox = boxes;
+    newBox[index].title = event.target.value;
+    setBoxes([ ...newBox ]);
+  };
+
+  const handleAddText = () => {
+    const newText = {
+      id: shortid.generate(),
+      top: 180,
+      left: 200,
+      title: 'Novo texto...'
+    }
+    setBoxes([ ...boxes, newText ]);
+
+    if (!panel.text) {
+      setPanel({ ...panel, text: true })
+    }
   };
 
   return (
     <div className="App">
 
-      {modalBackground && (
-        <ModalBackground onClick={handlClick} backgrounds={backgrounds} />
-      )}
-
       <button onClick={reset} className="reset">
         Nova Imagem
       </button>
 
+      {showModalBackground && (
+        <ModalBackground onClick={handleCloseBackgrounds} backgrounds={backgrounds} />
+      )}
+
       <div className="canvasWrapper">
-        {!format && (
-          <>
-            <span>Qual tipo de imagem quer criar?</span>
-            <div className="formatButtons">
-              <button onClick={() => handleType('horizontal')}>
-                <img src={imagePortrait} alt="Imagem para Feed"/>
-                Imagem para Feed
-              </button>
-              <button onClick={() => handleType('vertical')}>
-                <img src={imageLandScape} alt="Imagem para Stories"/>
-                Imagem para Stories
-              </button>
-            </div>
-          </>
+
+        {showSelectOrientation && (
+          <SelectOrientation onSelect={handleOrientation} />
         )}
 
-        {format && (
-          <div className={`${'canvas'} ${type === 'horizontal' ? 'portrait' : 'landscape'}`} style={{ background: `url('${localStorage.getItem('background')}')` }}>
+        {showModalCategories && (
+          <SelectCategories onSubmit={handleImageBackground} />
+        )}
 
-            {modalCategories && (
-              <Categories onSubmit={handleImageBackground} />
-            )}
+        {showPanel && (
+          <div className="panelWrapper">
 
+            <aside className="aside">
+              <div className="aside-item">
+                <span className="aside-title">Filtro</span>
+
+                <div className="asideFilterWrapper">
+                  <div className="switchColor">
+                    <Switch
+                      classes={{ root: "switch" }}
+                      checked={panel.filter}
+                      onChange={handlePanel('filter')}
+                      value="filter"
+                      color="primary"
+                      inputProps={{ 'aria-label': 'primary checkbox' }}
+                    />
+                    <div className="swatch" onClick={handleOpenColorPicker}>
+                      <div className="color" style={{ background: panel.filter ? filterColor : '#e0e0e0' }} />
+                    </div>
+                    {displayColorPicker ? (
+                      <div className="popover">
+                        <div className="cover" onClick={handleCloseColorPicker} />
+                        <SketchPicker
+                          color={filterColor}
+                          onChangeComplete={handleFilterColor}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
+                  <Slider
+                    disabled={!panel.filter}
+                    value={filterOpacity}
+                    min={0}
+                    step={0.1}
+                    max={1}
+                    onChange={handleChangeFilterValue}
+                    valueLabelDisplay="auto"
+                    aria-labelledby="discrete-slider"
+                  />
+                </div>
+              </div>
+              <div className="aside-item item-middle">
+                <span className="aside-title">Texto</span>
+
+                {boxes.map((input, index) => (
+                  <TextField
+                    key={input.id}
+                    id="outlined-size-normal"
+                    variant="outlined"
+                    size="small"
+                    value={input.title}
+                    onChange={event => handleChangeText(event, index)}
+                    classes={{ root: 'inputTextField' }}
+                  />
+                ))}
+
+                <Button
+                  variant="outlined"
+                  size="small"
+                  color="primary"
+                  onClick={handleAddText}
+                >
+                  Inserir texto
+                </Button>
+              
+              </div>
+
+            </aside>
+
+            <div className="panel">
+              <div
+                className={`${'canvas'} ${orientation === 'horizontal' ? 'portrait' : 'landscape'}`}
+                style={{ background: `url('${localStorage.getItem('background')}')`, backgroundSize: 'cover' }}
+              >
+                {panel.filter && (
+                  <OverlayFilter
+                    color={filterColor}
+                    opacity={filterOpacity}
+                  />
+                )}
+
+                {panel.text && (
+                  <DndProvider backend={Backend}>
+                    <DragAndDropText
+                      boxes={boxes}
+                      setBoxes={setBoxes}
+                    />
+                  </DndProvider>
+                )}
+              </div>
+            </div>
+            
           </div>
         )}
 
       </div>
-
     </div>
   );
 }
