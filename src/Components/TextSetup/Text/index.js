@@ -1,14 +1,19 @@
 import React from 'react'
 import { useDrag } from 'react-dnd'
-import ItemTypes from '../../config/ItemTypes'
-const style = {
-  position: 'absolute',
-  border: '1px dashed gray',
-  backgroundColor: 'white',
-  padding: '0.5rem 1rem',
-  cursor: 'move',
-}
-const Box = ({ id, left, top, hideSourceOnDrag, children }) => {
+import ItemTypes from '../../../config/ItemTypes'
+
+const Text = ({ id, left, top, hideSourceOnDrag, children, color, background, fontSize }) => {
+
+  const style = {
+    position: 'absolute',
+    border: '1px dashed gray',
+    backgroundColor: background,
+    color: color,
+    padding: '0.5rem 1rem',
+    cursor: 'move',
+    fontSize: fontSize,
+  }
+
   const [{ isDragging }, drag] = useDrag({
     item: { id, left, top, type: ItemTypes.BOX },
     collect: monitor => ({
@@ -24,4 +29,4 @@ const Box = ({ id, left, top, hideSourceOnDrag, children }) => {
     </div>
   )
 }
-export default Box;
+export default Text;

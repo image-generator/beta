@@ -33,25 +33,14 @@
   font-weight: 500;
   text-align: left;
 }
-.asideFilterWrapper {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.switchColor {
-  display: flex;
-  align-items: center;
-  margin-right: 25px;
-}
+
+
 .color {
   width: 20px;
   height: 15px;
   border-radius: 2px;
 }
-.switch {
-  margin-left: -12px;
-  margin-right: 5px;
-}
+
 .swatch {
   padding: 3px;
   background: #fff;
