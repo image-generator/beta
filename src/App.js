@@ -1,23 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import api from './services/api';
-import SelectCategories from './Components/SelectCategories';
-import SelectOrientation from './Components/SelectOrientation';
-
-import ModalBackground from './Components/ModalBackground';
-import { Switch, Slider, Button } from '@material-ui/core';
-import { ChromePicker } from 'react-color';
-import OverlayFilter from './Components/OverlayFilter';
-import DragAndDropText from './Components/DragAndDropText';
+import { Button } from '@material-ui/core';
 import shortid from 'shortid';
-import { pixabayKey } from './config';
-import { categoriesToQuery } from './utils/categoriesToQuery';
-
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
 
-import Input from './Components/General/Input';
+import SelectOrientation from './Components/SelectOrientation';
+import SelectCategories from './Components/SelectCategories';
+import SelectBackground from './Components/SelectBackground';
+import TextContainer from './Components/TextSetup/TextContainer'
+import FilterSetup from './Components/FilterColor/FilterSetup';
+import FilterOverlay from './Components/FilterColor/FilterOverlay';
+import DragAndDropText from './Components/TextSetup/DragAndDropText';
+import { categoriesToQuery } from './utils/categoriesToQuery';
+
+import { pixabayKey } from './config';
 
 import './App.css';
+import 'rc-color-picker/assets/index.css';
 
 function App() {
 
@@ -25,27 +25,23 @@ function App() {
   const [showModalCategories, setShowModalCategories] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [showModalBackground, setShowModalBackground] = useState(false);
+
   const [backgrounds, setBackgrounds] = useState('');
   const [orientation, setOrientation] = useState('');
-
-  const [texts, setTexts] = useState([])
 
   // Painel
   const [panel, setPanel] = useState({
     filter: true,
     text: false,
   });
-
+  const [texts, setTexts] = useState([])
   const [filterColor, setFilterColor] = useState('#FFF');
   const [filterOpacity, setFilterOpacity] = useState(0.2);
-  const [displayColorPicker, setDisplayColorPicker] = useState(false);
-
 
   useEffect(() => {
     localStorage.setItem('background', '')
   }, [])
   
-
   async function handleImageBackground(data) {
     if (backgrounds === '') {
       const response = await api.get(`?key=${pixabayKey}&q=${categoriesToQuery(data.selectedOption)}&orientation=${orientation}&image_type=photo&pretty=true`);
@@ -75,17 +71,7 @@ function App() {
   };
 
   const handleFilterColor = (color) => {
-    setFilterColor(color.hex);
-  };
-
-  const handleOpenColorPicker = () => {
-    if (panel.filter) {
-      setDisplayColorPicker(!displayColorPicker);
-    }
-  };
-
-  const handleCloseColorPicker = () => {
-    setDisplayColorPicker(false);
+    setFilterColor(color.color);
   };
 
   const handleChangeFilterValue = (event, newValue) => {
@@ -98,8 +84,9 @@ function App() {
       top: 180,
       left: 200,
       title: 'Novo texto...',
-      color: '',
-      background: ''
+      color: 'red',
+      background: '',
+      fontSize: 16,
     }
     setTexts([ ...texts, newText ]);
 
@@ -108,17 +95,9 @@ function App() {
     }
   };
 
-  const handleChangeText = (event, index) => {
-    const newText = texts;
-    newText[index].title = event.target.value;
-    setTexts([ ...newText ]);
-  };
-
-  const handleColorText = (index, color) => {
-    const newText = texts;
-    newText[index].color = color;
-    setTexts([ ...newText ]);
-  };
+  const handleColorOk = (color) => {
+    return color.color;
+  }
 
   return (
     <div className="App">
@@ -128,7 +107,7 @@ function App() {
       </button>
 
       {showModalBackground && (
-        <ModalBackground onClick={handleCloseBackgrounds} backgrounds={backgrounds} />
+        <SelectBackground onClick={handleCloseBackgrounds} backgrounds={backgrounds} />
       )}
 
       <div className="canvasWrapper">
@@ -145,58 +124,30 @@ function App() {
           <div className="panelWrapper">
 
             <aside className="aside">
+
               <div className="aside-item">
                 <span className="aside-title">Filtro</span>
-
-                <div className="asideFilterWrapper">
-                  <div className="switchColor">
-                    <Switch
-                      classes={{ root: "switch" }}
-                      checked={panel.filter}
-                      onChange={handlePanel('filter')}
-                      value="filter"
-                      color="primary"
-                      inputProps={{ 'aria-label': 'primary checkbox' }}
-                    />
-                    <div className="swatch" onClick={handleOpenColorPicker}>
-                      <div className="color" style={{ background: panel.filter ? filterColor : '#e0e0e0' }} />
-                    </div>
-                    {displayColorPicker ? (
-                      <div className="popover">
-                        <div className="cover" onClick={handleCloseColorPicker} />
-                        <ChromePicker
-                          color={filterColor}
-                          onChangeComplete={handleFilterColor}
-                        />
-                      </div>
-                    ) : null}
-                  </div>
-                  <Slider
-                    disabled={!panel.filter}
-                    value={filterOpacity}
-                    min={0}
-                    step={0.1}
-                    max={1}
-                    onChange={handleChangeFilterValue}
-                    valueLabelDisplay="auto"
-                    aria-labelledby="discrete-slider"
-                  />
-                </div>
+                <FilterSetup
+                  checked={panel.filter}
+                  color={filterColor}
+                  opacity={filterOpacity}
+                  onColorChange={handleFilterColor}
+                  onSwitchChange={handlePanel}
+                  onOpacityChange={handleChangeFilterValue}
+                />
               </div>
+
               <div className="aside-item item-middle">
                 <span className="aside-title">Texto</span>
-
                 {texts.map((input, index) => (
-                  <div key={input.id}>
-                    <Input
+                    <TextContainer
+                      key={input.id}
                       index={index}
-                      value={input.title}
-                      onChange={event => handleChangeText(event, index)}
-                      onChangeColor={handleColorText}
+                      text={input.title}
+                      texts={texts}
+                      setTexts={setTexts}
                     />
-                  </div>
                 ))}
-
                 <Button
                   variant="outlined"
                   size="small"
@@ -205,7 +156,6 @@ function App() {
                 >
                   Inserir texto
                 </Button>
-              
               </div>
 
             </aside>
@@ -216,7 +166,7 @@ function App() {
                 style={{ background: `url('${localStorage.getItem('background')}')`, backgroundSize: 'cover' }}
               >
                 {panel.filter && (
-                  <OverlayFilter
+                  <FilterOverlay
                     color={filterColor}
                     opacity={filterOpacity}
                   />

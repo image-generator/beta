@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { useDrop } from 'react-dnd'
-import ItemTypes from '../../config/ItemTypes'
+import ItemTypes from '../../../config/ItemTypes'
 import Text from '../Text'
 import update from 'immutability-helper'
 
@@ -34,7 +34,7 @@ const DragAndDropText = ({ texts, setTexts }) => {
     <div className="dnd">
       <div ref={drop} className="dnsCanvas">
         {texts.map((key, index) => {
-          const { id, left, top, title } = texts[index]
+          const { id, left, top, title, color, background, fontSize } = texts[index]
           return (
             <Text
               key={id}
@@ -42,6 +42,9 @@ const DragAndDropText = ({ texts, setTexts }) => {
               left={left}
               top={top}
               hideSourceOnDrag={hideSourceOnDrag}
+              color={color}
+              background={background}
+              fontSize={fontSize}
             >
               {title}
             </Text>
