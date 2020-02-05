@@ -1,7 +1,8 @@
 {
   "name": "image-generator",
   "version": "0.1.0",
-  "private": true,
+	"private": true,
+	"homepage": "https://image-generator.github.io/beta",
   "dependencies": {
     "@material-ui/core": "^4.9.0",
     "@testing-library/jest-dom": "^4.2.4",
@@ -10,6 +11,7 @@
     "axios": "^0.19.2",
     "immutability-helper": "^3.0.1",
     "rc-color-picker": "^1.2.6",
+    "gh-pages": "^2.2.0",
     "react": "^16.12.0",
     "react-color": "^2.18.0",
     "react-dnd": "^10.0.2",
@@ -27,7 +29,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+		"eject": "react-scripts eject",
+		"predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
