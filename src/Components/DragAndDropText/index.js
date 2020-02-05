@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 
 import { useDrop } from 'react-dnd'
 import ItemTypes from '../../config/ItemTypes'
-import Box from '../Box'
+import Text from '../Text'
 import update from 'immutability-helper'
 
 import './styles.css';
 
-const DragAndDropText = ({ boxes, setBoxes }) => {
+const DragAndDropText = ({ texts, setTexts }) => {
   const [hideSourceOnDrag] = useState(true)
 
   const [, drop] = useDrop({
@@ -16,13 +16,13 @@ const DragAndDropText = ({ boxes, setBoxes }) => {
       const delta = monitor.getDifferenceFromInitialOffset()
       const left = Math.round(item.left + delta.x)
       const top = Math.round(item.top + delta.y)
-      moveBox(item.id, left, top)
+      handleMoveText(item.id, left, top)
       return undefined
     },
   })
-  const moveBox = (id, left, top) => {
-    setBoxes(
-      update(boxes, {
+  const handleMoveText = (id, left, top) => {
+    setTexts(
+      update(texts, {
         [id]: {
           $merge: { left, top },
         },
@@ -33,10 +33,10 @@ const DragAndDropText = ({ boxes, setBoxes }) => {
   return (
     <div className="dnd">
       <div ref={drop} className="dnsCanvas">
-        {boxes.map((key, index) => {
-          const { id, left, top, title } = boxes[index]
+        {texts.map((key, index) => {
+          const { id, left, top, title } = texts[index]
           return (
-            <Box
+            <Text
               key={id}
               id={index}
               left={left}
@@ -44,7 +44,7 @@ const DragAndDropText = ({ boxes, setBoxes }) => {
               hideSourceOnDrag={hideSourceOnDrag}
             >
               {title}
-            </Box>
+            </Text>
           )
         })}
       </div>

@@ -8,7 +8,7 @@ const style = {
   padding: '0.5rem 1rem',
   cursor: 'move',
 }
-const Box = ({ id, left, top, hideSourceOnDrag, children }) => {
+const Text = ({ id, left, top, hideSourceOnDrag, children }) => {
   const [{ isDragging }, drag] = useDrag({
     item: { id, left, top, type: ItemTypes.BOX },
     collect: monitor => ({
@@ -24,4 +24,4 @@ const Box = ({ id, left, top, hideSourceOnDrag, children }) => {
     </div>
   )
 }
-export default Box;
+export default Text;

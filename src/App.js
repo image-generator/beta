@@ -4,8 +4,8 @@ import SelectCategories from './Components/SelectCategories';
 import SelectOrientation from './Components/SelectOrientation';
 
 import ModalBackground from './Components/ModalBackground';
-import { Switch, Slider, TextField, Button } from '@material-ui/core';
-import { SketchPicker } from 'react-color';
+import { Switch, Slider, Button } from '@material-ui/core';
+import { ChromePicker } from 'react-color';
 import OverlayFilter from './Components/OverlayFilter';
 import DragAndDropText from './Components/DragAndDropText';
 import shortid from 'shortid';
@@ -14,6 +14,8 @@ import { categoriesToQuery } from './utils/categoriesToQuery';
 
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
+
+import Input from './Components/General/Input';
 
 import './App.css';
 
@@ -26,7 +28,7 @@ function App() {
   const [backgrounds, setBackgrounds] = useState('');
   const [orientation, setOrientation] = useState('');
 
-  const [boxes, setBoxes] = useState([])
+  const [texts, setTexts] = useState([])
 
   // Painel
   const [panel, setPanel] = useState({
@@ -90,24 +92,32 @@ function App() {
     setFilterOpacity(newValue);
   };
 
-  const handleChangeText = (event, index) => {
-    const newBox = boxes;
-    newBox[index].title = event.target.value;
-    setBoxes([ ...newBox ]);
-  };
-
   const handleAddText = () => {
     const newText = {
       id: shortid.generate(),
       top: 180,
       left: 200,
-      title: 'Novo texto...'
+      title: 'Novo texto...',
+      color: '',
+      background: ''
     }
-    setBoxes([ ...boxes, newText ]);
+    setTexts([ ...texts, newText ]);
 
     if (!panel.text) {
       setPanel({ ...panel, text: true })
     }
+  };
+
+  const handleChangeText = (event, index) => {
+    const newText = texts;
+    newText[index].title = event.target.value;
+    setTexts([ ...newText ]);
+  };
+
+  const handleColorText = (index, color) => {
+    const newText = texts;
+    newText[index].color = color;
+    setTexts([ ...newText ]);
   };
 
   return (
@@ -154,7 +164,7 @@ function App() {
                     {displayColorPicker ? (
                       <div className="popover">
                         <div className="cover" onClick={handleCloseColorPicker} />
-                        <SketchPicker
+                        <ChromePicker
                           color={filterColor}
                           onChangeComplete={handleFilterColor}
                         />
@@ -176,16 +186,15 @@ function App() {
               <div className="aside-item item-middle">
                 <span className="aside-title">Texto</span>
 
-                {boxes.map((input, index) => (
-                  <TextField
-                    key={input.id}
-                    id="outlined-size-normal"
-                    variant="outlined"
-                    size="small"
-                    value={input.title}
-                    onChange={event => handleChangeText(event, index)}
-                    classes={{ root: 'inputTextField' }}
-                  />
+                {texts.map((input, index) => (
+                  <div key={input.id}>
+                    <Input
+                      index={index}
+                      value={input.title}
+                      onChange={event => handleChangeText(event, index)}
+                      onChangeColor={handleColorText}
+                    />
+                  </div>
                 ))}
 
                 <Button
@@ -216,8 +225,8 @@ function App() {
                 {panel.text && (
                   <DndProvider backend={Backend}>
                     <DragAndDropText
-                      boxes={boxes}
-                      setBoxes={setBoxes}
+                      texts={texts}
+                      setTexts={setTexts}
                     />
                   </DndProvider>
                 )}
