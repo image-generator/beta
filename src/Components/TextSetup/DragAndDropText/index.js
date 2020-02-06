@@ -34,7 +34,7 @@ const DragAndDropText = ({ texts, setTexts }) => {
     <div className="dnd">
       <div ref={drop} className="dnsCanvas">
         {texts.map((key, index) => {
-          const { id, left, top, title, color, background, fontSize } = texts[index]
+          const { id, left, top, title, color, background, fontSize, paddingTop, paddingLeft } = texts[index]
           return (
             <Text
               key={id}
@@ -45,6 +45,10 @@ const DragAndDropText = ({ texts, setTexts }) => {
               color={color}
               background={background}
               fontSize={fontSize}
+              paddingTop={paddingTop}
+              paddingBottom={paddingTop}
+              paddingLeft={paddingLeft}
+              paddingRight={paddingLeft}
             >
               {title}
             </Text>

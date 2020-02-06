@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
+import { Create } from '@material-ui/icons';
 import shortid from 'shortid';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
@@ -13,6 +14,7 @@ import FilterSetup from '../Components/FilterColor/FilterSetup';
 import FilterOverlay from '../Components/FilterColor/FilterOverlay';
 import DragAndDropText from '../Components/TextSetup/DragAndDropText';
 import { categoriesToQuery } from '../utils/categoriesToQuery';
+
 
 import { pixabayKey } from '../config';
 
@@ -84,9 +86,13 @@ function Main() {
       top: 180,
       left: 200,
       title: 'Novo texto...',
-      color: 'red',
-      background: '',
+      color: '#000000',
+      background: '#FFF',
       fontSize: 16,
+      paddingTop: '8px',
+      paddingBottom: '8px',
+      paddingLeft: '16px',
+      paddingRight: '16px',
     }
     setTexts([ ...texts, newText ]);
 
@@ -94,10 +100,6 @@ function Main() {
       setPanel({ ...panel, text: true })
     }
   };
-
-  const handleColorOk = (color) => {
-    return color.color;
-  }
 
   return (
     <div className="App">
@@ -138,24 +140,30 @@ function Main() {
               </div>
 
               <div className="aside-item item-middle">
-                <span className="aside-title">Texto</span>
+                <span className="aside-title-text">
+                  Textos
+                  <IconButton
+                    onClick={handleAddText}
+                    color="primary"
+                    aria-label="add to shopping cart"
+                    className="iconAddText"
+                  >
+                    <Create />
+                  </IconButton>
+                </span>
                 {texts.map((input, index) => (
                     <TextContainer
                       key={input.id}
                       index={index}
                       text={input.title}
+                      color={input.color}
+                      background={input.background}
+                      padding={input.padding}
                       texts={texts}
                       setTexts={setTexts}
                     />
                 ))}
-                <Button
-                  variant="outlined"
-                  size="small"
-                  color="primary"
-                  onClick={handleAddText}
-                >
-                  Inserir texto
-                </Button>
+                
               </div>
 
             </aside>
