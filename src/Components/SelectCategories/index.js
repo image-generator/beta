@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { options } from '../../config';
 import './styles.css';
-import { Chip, Dialog, DialogTitle, DialogContent, DialogContentText, Button, DialogActions, FormControl, InputLabel, MenuItem, Select, Checkbox, ListItemText, TextField } from '@material-ui/core';
+import { Chip, Dialog, DialogTitle, DialogContent, DialogContentText, Button, TextField, FormControl } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({

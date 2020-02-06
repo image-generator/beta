@@ -5,7 +5,17 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   input: {
     marginBottom:10,
-  }
+    '& div': {
+      height: 26,
+      borderRadius: 2,
+    },
+    '& input': {
+      fontSize: 14,
+      fontWeight: 400,
+      paddingTop: 0,
+      paddingBottom: 0,
+    }
+  },
 });
 
 const Input = ({ onChange, value }) => {
@@ -18,7 +28,7 @@ const Input = ({ onChange, value }) => {
       size="small"
       value={value}
       onChange={onChange}
-      classes={{ root: classes.input }}
+      classes={{ root: classes.input, focused: classes.focus }}
     />
   );
 }

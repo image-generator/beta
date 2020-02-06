@@ -23,15 +23,31 @@
   border-bottom: 1px solid rgba(0,0,0,.12);
 }
 .item-middle {
-  padding-top: 24px;
+  padding-top: 10px;
+  padding-bottom: 0px;
 }
 .aside-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 500;
+  text-align: left;
   margin: 0 0 8px;
   color: rgba(0,0,0,.87);
   font-size: 13px;
-  display: block;
+}
+.aside-title-text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   font-weight: 500;
   text-align: left;
+  margin: 0 0 13px;
+  color: rgba(0,0,0,.87);
+  font-size: 13px;
+}
+.iconAddText {
+  font-size: 18px;
 }
 
 
