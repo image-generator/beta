@@ -1,6 +1,6 @@
 export const categoriesToQuery = (categories) => {
   const handleArray = [];
-  categories.map(item => {
+  categories.map((item) => {
     handleArray.push(item.value);
     return handleArray;
   });
