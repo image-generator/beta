@@ -1,146 +1,151 @@
-import React from 'react';
-import ColorPicker from 'rc-color-picker';
-import Input from '../../General/Input';
-import { makeStyles } from '@material-ui/core/styles';
-import { Slider, Tooltip } from '@material-ui/core';
-import IconTextColor from '@material-ui/icons/FormatColorText';
-import IconBgColor from '@material-ui/icons/FormatColorFill';
-
+import React from "react";
+import ColorPicker from "rc-color-picker";
+import Input from "../../General/Input";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Tooltip,
+  Select,
+  MenuItem,
+  IconButton,
+  OutlinedInput
+} from "@material-ui/core";
+import IconTextColor from "@material-ui/icons/FormatColorText";
+import Bold from "@material-ui/icons/FormatBold";
+import Italic from "@material-ui/icons/FormatItalic";
+import Underline from "@material-ui/icons/FormatUnderlined";
+import "./styles.css";
 
 const useStyles = makeStyles({
   wrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: 15,
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: 15
   },
   setup: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%"
   },
   slider: {
-    width: '100%',
-    marginLeft: 10,
+    width: "100%",
+    marginLeft: 10
   },
   icon: {
-    fontSize: 15,
-    marginRight: 7,
-    marginTop: -2,
+    fontSize: 15
+  },
+  paper: {
+    maxHeight: "calc(50% - 96px)"
   }
 });
 
-const TextContainer = ({ index, text, color, background, texts, setTexts }) => {
+const TextContainer = ({ index, text, color, texts, setTexts }) => {
   const classes = useStyles();
 
-  const handleTextColor = (color) => {
+  const [formats, setFormats] = React.useState(() => ["bold"]);
+
+  const handleFormat = (event, newFormats) => {
+    setFormats(newFormats);
+  };
+
+  const handleTextColor = color => {
     const newText = texts;
     newText[index].color = color.color;
-    setTexts([ ...newText ]);
+    setTexts([...newText]);
   };
 
-  const handleBackgroundColor = (color) => {
-    const newText = texts;
-    newText[index].background = color.color;
-    setTexts([ ...newText ]);
-  };
-
-  const handleText = (event) => {
+  const handleText = event => {
     const newText = texts;
     newText[index].title = event.target.value;
-    setTexts([ ...newText ]);
+    setTexts([...newText]);
   };
 
-  const handleSize = (event, fontSize) => {
-    const newText = texts;
-    newText[index].fontSize = fontSize;
-    setTexts([ ...newText ]);
+  const handleFontSize = event => {
+    const newTexts = texts;
+    newTexts[index].fontSize = event.target.value;
+    setTexts([...newTexts]);
   };
 
-  const handlePaddingVertical = (event, direction) => {
-    const newText = texts;
-    newText[index].paddingTop = `${direction}px`;
-    newText[index].paddingBottom = `${direction}px`;
-    setTexts([ ...newText ]);
-  };
-
-  const handlePaddingHorizontal = (event, direction) => {
-    const newText = texts;
-    newText[index].paddingLeft = `${direction}px`;
-    newText[index].paddingRight = `${direction}px`;
-    setTexts([ ...newText ]);
+  const handleFormatText = (event, format) => {
+    let newTexts = texts;
+    if (format === "bold") {
+      newTexts[index].fontWeight =
+        newTexts[index].fontWeight === "normal" ? "bold" : "normal";
+    } else if (format === "italic") {
+      newTexts[index].fontStyle =
+        newTexts[index].fontStyle === "normal" ? "italic" : "normal";
+    } else if (format === "underline") {
+      newTexts[index].textDecoration =
+        newTexts[index].textDecoration === "none" ? "underline" : "none";
+    }
+    setTexts([...newTexts]);
   };
 
   function ValueLabelComponent(props) {
     const { children, open, value } = props;
-  
-    return (
-      <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
-        {children}
-      </Tooltip>
-    );
   }
-
   return (
     <div className={classes.wrapper}>
-      <Input
-        index={index}
-        value={text}
-        onChange={event => handleText(event)}
-      />
+      <Input index={index} value={text} onChange={event => handleText(event)} />
       <div className={classes.setup}>
-        <IconTextColor className={classes.icon} color="primary" />
         <ColorPicker
           color={color}
           alpha={100}
           onChange={handleTextColor}
           placement="bottomLeft"
         />
-        <div className={classes.slider}>
-          <Slider
-            min={14}
-            step={2}
-            max={44}
-            defaultValue={16}
-            ValueLabelComponent={ValueLabelComponent}
-            onChange={handleSize}
-            aria-label="custom thumb label"
-            />
+        <Select
+          id="font-size"
+          value={texts[index].fontSize}
+          onChange={handleFontSize}
+          input={<OutlinedInput />}
+          className="selectFont"
+          MenuProps={{
+            classes: {
+              paper: classes.paper
+            }
+          }}
+        >
+          <MenuItem value={14}>14</MenuItem>
+          <MenuItem value={16}>16</MenuItem>
+          <MenuItem value={18}>18</MenuItem>
+          <MenuItem value={20}>20</MenuItem>
+          <MenuItem value={22}>22</MenuItem>
+          <MenuItem value={24}>24</MenuItem>
+          <MenuItem value={26}>26</MenuItem>
+          <MenuItem value={28}>28</MenuItem>
+          <MenuItem value={30}>30</MenuItem>
+          <MenuItem value={32}>32</MenuItem>
+          <MenuItem value={34}>34</MenuItem>
+          <MenuItem value={36}>36</MenuItem>
+          <MenuItem value={38}>38</MenuItem>
+          <MenuItem value={40}>40</MenuItem>
+          <MenuItem value={42}>42</MenuItem>
+          <MenuItem value={44}>44</MenuItem>
+        </Select>
+        <div className="formatWrapper">
+          <IconButton
+            aria-label="bold"
+            onClick={event => handleFormatText(event, "bold")}
+          >
+            <Bold className={classes.icon} />
+          </IconButton>
+          <IconButton
+            aria-label="italic"
+            onClick={event => handleFormatText(event, "italic")}
+          >
+            <Italic className={classes.icon} />
+          </IconButton>
+          <IconButton
+            aria-label="underline"
+            onClick={event => handleFormatText(event, "underline")}
+          >
+            <Underline className={classes.icon} />
+          </IconButton>
         </div>
       </div>
-      <div className={classes.setup}>
-        <IconBgColor className={classes.icon} color="primary" />
-        <ColorPicker
-          color={background}
-          alpha={100}
-          onChange={handleBackgroundColor}
-          placement="bottomLeft"
-        />
-        <div className={classes.slider}>
-          <Slider
-            min={0}
-            step={1}
-            max={50}
-            defaultValue={8}
-            ValueLabelComponent={ValueLabelComponent}
-            onChange={handlePaddingVertical}
-            aria-label="custom thumb label"
-            />
-        </div>
-        <div className={classes.slider}>
-          <Slider
-            min={0}
-            step={1}
-            max={50}
-            defaultValue={16}
-            ValueLabelComponent={ValueLabelComponent}
-            onChange={handlePaddingHorizontal}
-            aria-label="custom thumb label"
-            />
-        </div>
-      </div>
-      
     </div>
   );
-}
+};
 
 export default TextContainer;

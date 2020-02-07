@@ -1,35 +1,46 @@
-import React from 'react'
-import { useDrag } from 'react-dnd'
-import ItemTypes from '../../../config/ItemTypes'
+import React from "react";
+import { useDrag } from "react-dnd";
+import ItemTypes from "../../../config/ItemTypes";
 
-const Text = ({ id, left, top, hideSourceOnDrag, children, color, background, fontSize, paddingTop, paddingLeft }) => {
-
+const Text = ({
+  hideSourceOnDrag,
+  children,
+  id,
+  left,
+  top,
+  color,
+  fontSize,
+  fontWeight,
+  fontStyle,
+  textDecoration
+}) => {
   const style = {
-    position: 'absolute',
-    backgroundColor: background,
+    position: "absolute",
+    cursor: "move",
     color: color,
-    paddingTop: paddingTop,
-    paddingBottom: paddingTop,
-    paddingLeft: paddingLeft,
-    paddingRight: paddingLeft,
-    cursor: 'move',
     fontSize: fontSize,
-    transition: 'font-size 0.1s'
-  }
-  
+    fontWeight: fontWeight,
+    fontStyle: fontStyle,
+    textDecoration: textDecoration
+  };
+  console.log("style", style);
+
   const [{ isDragging }, drag] = useDrag({
     item: { id, left, top, type: ItemTypes.BOX },
     collect: monitor => ({
-      isDragging: monitor.isDragging(),
-    }),
-  })
+      isDragging: monitor.isDragging()
+    })
+  });
+
   if (isDragging && hideSourceOnDrag) {
-    return <div ref={drag} />
+    return <div ref={drag} />;
   }
+
   return (
     <div ref={drag} style={{ ...style, left, top }}>
       {children}
     </div>
-  )
-}
+  );
+};
+
 export default Text;
