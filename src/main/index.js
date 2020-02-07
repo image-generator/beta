@@ -98,12 +98,7 @@ function Main() {
       left: 200,
       title: 'Novo texto...',
       color: '#000000',
-      background: '#FFF',
       fontSize: 16,
-      paddingTop: '8px',
-      paddingBottom: '8px',
-      paddingLeft: '16px',
-      paddingRight: '16px',
     }
     setTexts([ ...texts, newText ]);
 
