@@ -23,15 +23,14 @@ import './styles.css';
 import 'rc-color-picker/assets/index.css';
 
 function Main() {
-  
   const [showSelectOrientation, setShowSelectOrientation] = useState(true);
   const [showModalCategories, setShowModalCategories] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [showModalBackground, setShowModalBackground] = useState(false);
-  
+
   const [backgrounds, setBackgrounds] = useState('');
   const [orientation, setOrientation] = useState('');
-  
+
   // Painel
   const [panel, setPanel] = useState({
     filter: true,
@@ -40,11 +39,11 @@ function Main() {
   const [texts, setTexts] = useState([])
   const [filterColor, setFilterColor] = useState('#FFF');
   const [filterOpacity, setFilterOpacity] = useState(0.2);
-  
+
   useEffect(() => {
     localStorage.setItem('background', '')
   }, [])
-  
+
   async function handleImageBackground(data) {
     if (backgrounds === '') {
       const response = await api.get(`?key=${pixabayKey}&q=${categoriesToQuery(data.selectedOption)}&orientation=${orientation}&image_type=photo&pretty=true`);
@@ -56,12 +55,12 @@ function Main() {
 
   const handleDownload = () => {
     domtoimage.toJpeg(document.getElementById('download'), { quality: 0.95 })
-    .then(function (dataUrl) {
+      .then(function (dataUrl) {
         var link = document.createElement('a');
         link.download = 'my-image-name.jpeg';
         link.href = dataUrl;
         link.click();
-    });
+      });
   };
 
   const handleOrientation = (orientation) => {
@@ -105,7 +104,8 @@ function Main() {
       paddingLeft: '16px',
       paddingRight: '16px',
     }
-    setTexts([ ...texts, newText ]);
+
+    setTexts([...texts, newText]);
 
     if (!panel.text) {
       setPanel({ ...panel, text: true })
@@ -163,24 +163,27 @@ function Main() {
                   </IconButton>
                 </span>
                 {texts.map((input, index) => (
-                    <TextContainer
-                      key={input.id}
-                      index={index}
-                      text={input.title}
-                      color={input.color}
-                      background={input.background}
-                      padding={input.padding}
-                      texts={texts}
-                      setTexts={setTexts}
-                    />
+                  <TextContainer
+                    key={input.id}
+                    index={index}
+                    text={input.title}
+                    color={input.color}
+                    background={input.background}
+                    padding={input.padding}
+                    texts={texts}
+                    setTexts={setTexts}
+                  />
                 ))}
-                
+
               </div>
 
             </aside>
 
             <div className="panel">
-              <div id="download" className={`${'canvas'} ${orientation === 'horizontal' ? 'portrait' : 'landscape'}`} style={{ background: `url('${localStorage.getItem('background')}')`, backgroundSize: 'cover' }}>
+              <div
+                id="download"
+                className={`${'canvas'} ${orientation === 'horizontal' ? 'portrait' : 'landscape'}`}
+                style={{ background: `url('${localStorage.getItem('background')}')`, backgroundSize: 'cover' }}>
                 {panel.filter && (
                   <FilterOverlay
                     color={filterColor}
