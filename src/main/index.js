@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { IconButton } from '@material-ui/core';
-import { Create } from '@material-ui/icons';
+import { IconButton, Fab } from '@material-ui/core';
+import { Create, GetApp } from '@material-ui/icons';
 import shortid from 'shortid';
 import { DndProvider } from 'react-dnd';
 import Backend from 'react-dnd-html5-backend';
+import domtoimage from 'dom-to-image';
 
 import api from '../services/api';
 import SelectOrientation from '../Components/SelectOrientation';
@@ -22,15 +23,15 @@ import './styles.css';
 import 'rc-color-picker/assets/index.css';
 
 function Main() {
-
+  
   const [showSelectOrientation, setShowSelectOrientation] = useState(true);
   const [showModalCategories, setShowModalCategories] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [showModalBackground, setShowModalBackground] = useState(false);
-
+  
   const [backgrounds, setBackgrounds] = useState('');
   const [orientation, setOrientation] = useState('');
-
+  
   // Painel
   const [panel, setPanel] = useState({
     filter: true,
@@ -39,11 +40,11 @@ function Main() {
   const [texts, setTexts] = useState([])
   const [filterColor, setFilterColor] = useState('#FFF');
   const [filterOpacity, setFilterOpacity] = useState(0.2);
-
+  
   useEffect(() => {
     localStorage.setItem('background', '')
   }, [])
-
+  
   async function handleImageBackground(data) {
     if (backgrounds === '') {
       const response = await api.get(`?key=${pixabayKey}&q=${categoriesToQuery(data.selectedOption)}&orientation=${orientation}&image_type=photo&pretty=true`);
@@ -51,6 +52,16 @@ function Main() {
       setShowModalBackground(true);
       setShowPanel(true);
     }
+  };
+
+  const handleDownload = () => {
+    domtoimage.toJpeg(document.getElementById('download'), { quality: 0.95 })
+    .then(function (dataUrl) {
+        var link = document.createElement('a');
+        link.download = 'my-image-name.jpeg';
+        link.href = dataUrl;
+        link.click();
+    });
   };
 
   const handleOrientation = (orientation) => {
@@ -169,10 +180,7 @@ function Main() {
             </aside>
 
             <div className="panel">
-              <div
-                className={`${'canvas'} ${orientation === 'horizontal' ? 'portrait' : 'landscape'}`}
-                style={{ background: `url('${localStorage.getItem('background')}')`, backgroundSize: 'cover' }}
-              >
+              <div id="download" className={`${'canvas'} ${orientation === 'horizontal' ? 'portrait' : 'landscape'}`} style={{ background: `url('${localStorage.getItem('background')}')`, backgroundSize: 'cover' }}>
                 {panel.filter && (
                   <FilterOverlay
                     color={filterColor}
@@ -191,6 +199,9 @@ function Main() {
               </div>
             </div>
 
+            <Fab onClick={handleDownload} aria-label="Download" className="fab" color="primary">
+              <GetApp />
+            </Fab>
           </div>
         )}
 

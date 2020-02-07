@@ -7,6 +7,12 @@
   flex-direction: column;
   position: relative;
 }
+.fab {
+  position: absolute !important;
+  right: 20px;
+  bottom: 20px;
+  z-index: 10000;
+}
 .aside {
   width: 340px;
   min-height: 100vh;
