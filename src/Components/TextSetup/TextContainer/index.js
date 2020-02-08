@@ -66,6 +66,21 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
     setTexts([...newTexts]);
   };
 
+  const handleFormatText = (event, format) => {
+    let newTexts = texts;
+    if (format === "bold") {
+      newTexts[index].fontWeight =
+        newTexts[index].fontWeight === "normal" ? "bold" : "normal";
+    } else if (format === "italic") {
+      newTexts[index].fontStyle =
+        newTexts[index].fontStyle === "normal" ? "italic" : "normal";
+    } else if (format === "underline") {
+      newTexts[index].textDecoration =
+        newTexts[index].textDecoration === "none" ? "underline" : "none";
+    }
+    setTexts([...newTexts]);
+  };
+
   function ValueLabelComponent(props) {
     const { children, open, value } = props;
   }
@@ -109,13 +124,22 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
           <MenuItem value={44}>44</MenuItem>
         </Select>
         <div className="formatWrapper">
-          <IconButton aria-label="bold">
+          <IconButton
+            aria-label="bold"
+            onClick={event => handleFormatText(event, "bold")}
+          >
             <Bold className={classes.icon} />
           </IconButton>
-          <IconButton aria-label="italic">
+          <IconButton
+            aria-label="italic"
+            onClick={event => handleFormatText(event, "italic")}
+          >
             <Italic className={classes.icon} />
           </IconButton>
-          <IconButton aria-label="underline">
+          <IconButton
+            aria-label="underline"
+            onClick={event => handleFormatText(event, "underline")}
+          >
             <Underline className={classes.icon} />
           </IconButton>
         </div>

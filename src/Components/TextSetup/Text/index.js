@@ -9,14 +9,21 @@ const Text = ({
   left,
   top,
   color,
-  fontSize
+  fontSize,
+  fontWeight,
+  fontStyle,
+  textDecoration
 }) => {
   const style = {
     position: "absolute",
     cursor: "move",
     color: color,
-    fontSize: fontSize
+    fontSize: fontSize,
+    fontWeight: fontWeight,
+    fontStyle: fontStyle,
+    textDecoration: textDecoration
   };
+  console.log("style", style);
 
   const [{ isDragging }, drag] = useDrag({
     item: { id, left, top, type: ItemTypes.BOX },
