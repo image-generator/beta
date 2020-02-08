@@ -15,7 +15,7 @@ import FilterSetup from "../Components/FilterColor/FilterSetup";
 import FilterOverlay from "../Components/FilterColor/FilterOverlay";
 import DragAndDropText from "../Components/TextSetup/DragAndDropText";
 import { categoriesToQuery } from "../utils/categoriesToQuery";
-import AddCircleOutlineIcon from "@material-ui/icons/AddCircleOutline";
+import Add from "@material-ui/icons/Add";
 
 import { pixabayKey } from "../config";
 
@@ -161,7 +161,7 @@ function Main() {
                     aria-label="add to shopping cart"
                     className="iconAddText"
                   >
-                    <AddCircleOutlineIcon />
+                    <Add />
                   </IconButton>
                 </span>
                 {texts.map((input, index) => (

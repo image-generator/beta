@@ -1,5 +1,8 @@
 .formatWrapper {
   display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: -15px;
 }
 .selectFont {
   height: 25px;
@@ -8,4 +11,15 @@
 .selectFont div {
   font-size: 12px;
   padding-left: 7px;
+}
+.closeButton {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+}
+.inputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
