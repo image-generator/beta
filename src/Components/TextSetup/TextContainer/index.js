@@ -9,7 +9,7 @@ import {
   IconButton,
   OutlinedInput
 } from "@material-ui/core";
-import IconTextColor from "@material-ui/icons/FormatColorText";
+import Delete from "@material-ui/icons/Delete";
 import Bold from "@material-ui/icons/FormatBold";
 import Italic from "@material-ui/icons/FormatItalic";
 import Underline from "@material-ui/icons/FormatUnderlined";
@@ -36,6 +36,9 @@ const useStyles = makeStyles({
   },
   paper: {
     maxHeight: "calc(50% - 96px)"
+  },
+  closeButton: {
+    marginRight: -15
   }
 });
 
@@ -81,12 +84,31 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
     setTexts([...newTexts]);
   };
 
+  const handleRemove = () => {
+    let newTexts = texts;
+    newTexts.splice(index, 1);
+    setTexts([...newTexts]);
+  };
+
   function ValueLabelComponent(props) {
     const { children, open, value } = props;
   }
   return (
     <div className={classes.wrapper}>
-      <Input index={index} value={text} onChange={event => handleText(event)} />
+      <div className="inputWrapper">
+        <Input
+          index={index}
+          value={text}
+          onChange={event => handleText(event)}
+        />
+        <IconButton
+          className={classes.closeButton}
+          aria-label="remove"
+          onClick={handleRemove}
+        >
+          <Delete className={classes.icon} />
+        </IconButton>
+      </div>
       <div className={classes.setup}>
         <ColorPicker
           color={color}
@@ -125,18 +147,25 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
         </Select>
         <div className="formatWrapper">
           <IconButton
+            color={texts[index].fontWeight === "bold" ? "primary" : "default"}
             aria-label="bold"
             onClick={event => handleFormatText(event, "bold")}
           >
             <Bold className={classes.icon} />
           </IconButton>
           <IconButton
+            color={texts[index].fontStyle === "italic" ? "primary" : "default"}
             aria-label="italic"
             onClick={event => handleFormatText(event, "italic")}
           >
             <Italic className={classes.icon} />
           </IconButton>
           <IconButton
+            color={
+              texts[index].textDecoration === "underline"
+                ? "primary"
+                : "default"
+            }
             aria-label="underline"
             onClick={event => handleFormatText(event, "underline")}
           >
