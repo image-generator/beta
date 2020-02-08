@@ -1,79 +1,78 @@
-import React from 'react';
-import ColorPicker from 'rc-color-picker';
-import Input from '../../General/Input';
-import { makeStyles } from '@material-ui/core/styles';
-import { Tooltip, Select, MenuItem, IconButton, OutlinedInput } from '@material-ui/core';
-import IconTextColor from '@material-ui/icons/FormatColorText';
-import Bold from '@material-ui/icons/FormatBold';
-import Italic from '@material-ui/icons/FormatItalic';
-import Underline from '@material-ui/icons/FormatUnderlined';
+import React from "react";
+import ColorPicker from "rc-color-picker";
+import Input from "../../General/Input";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Tooltip,
+  Select,
+  MenuItem,
+  IconButton,
+  OutlinedInput
+} from "@material-ui/core";
+import IconTextColor from "@material-ui/icons/FormatColorText";
+import Bold from "@material-ui/icons/FormatBold";
+import Italic from "@material-ui/icons/FormatItalic";
+import Underline from "@material-ui/icons/FormatUnderlined";
+import "./styles.css";
 
 const useStyles = makeStyles({
   wrapper: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginBottom: 15,
+    display: "flex",
+    flexDirection: "column",
+    marginBottom: 15
   },
   setup: {
-    display: 'flex',
-    alignItems: 'center',
-    width: '100%',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    width: "100%"
   },
   slider: {
-    width: '100%',
-    marginLeft: 10,
+    width: "100%",
+    marginLeft: 10
   },
   icon: {
-    fontSize: 15,
+    fontSize: 15
+  },
+  paper: {
+    maxHeight: "calc(50% - 96px)"
   }
 });
 
 const TextContainer = ({ index, text, color, texts, setTexts }) => {
   const classes = useStyles();
 
-  const [formats, setFormats] = React.useState(() => ['bold']);
+  const [formats, setFormats] = React.useState(() => ["bold"]);
 
   const handleFormat = (event, newFormats) => {
     setFormats(newFormats);
   };
 
-  const handleTextColor = (color) => {
+  const handleTextColor = color => {
     const newText = texts;
     newText[index].color = color.color;
-    setTexts([ ...newText ]);
+    setTexts([...newText]);
   };
 
-  const handleText = (event) => {
+  const handleText = event => {
     const newText = texts;
     newText[index].title = event.target.value;
-    setTexts([ ...newText ]);
+    setTexts([...newText]);
   };
 
-  const handleFontSize = (event) => {
+  const handleFontSize = event => {
     const newTexts = texts;
     newTexts[index].fontSize = event.target.value;
-    setTexts([ ...newTexts ]);
+    setTexts([...newTexts]);
   };
 
   function ValueLabelComponent(props) {
     const { children, open, value } = props;
-  
-    return (
-      <Tooltip open={open} enterTouchDelay={0} placement="top" title={value}>
-        {children}
-      </Tooltip>
-    );
   }
-
   return (
     <div className={classes.wrapper}>
-      <Input
-        index={index}
-        value={text}
-        onChange={event => handleText(event)}
-      />
+      <Input index={index} value={text} onChange={event => handleText(event)} />
       <div className={classes.setup}>
-        <IconTextColor className={classes.icon} color="primary" />
         <ColorPicker
           color={color}
           alpha={100}
@@ -85,6 +84,12 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
           value={texts[index].fontSize}
           onChange={handleFontSize}
           input={<OutlinedInput />}
+          className="selectFont"
+          MenuProps={{
+            classes: {
+              paper: classes.paper
+            }
+          }}
         >
           <MenuItem value={14}>14</MenuItem>
           <MenuItem value={16}>16</MenuItem>
@@ -103,7 +108,7 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
           <MenuItem value={42}>42</MenuItem>
           <MenuItem value={44}>44</MenuItem>
         </Select>
-        <div className={classes.toggleContainer}>
+        <div className="formatWrapper">
           <IconButton aria-label="bold">
             <Bold className={classes.icon} />
           </IconButton>
@@ -114,9 +119,9 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
             <Underline className={classes.icon} />
           </IconButton>
         </div>
-      </div>      
+      </div>
     </div>
   );
-}
+};
 
 export default TextContainer;

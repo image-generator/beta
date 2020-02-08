@@ -1,0 +1,11 @@
+.formatWrapper {
+  display: flex;
+}
+.selectFont {
+  height: 25px;
+  margin-left: 10px;
+}
+.selectFont div {
+  font-size: 12px;
+  padding-left: 7px;
+}

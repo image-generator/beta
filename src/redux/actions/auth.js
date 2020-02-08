@@ -1,6 +1,6 @@
-import { SET_AUTH_TOKEN} from '../actionTypes'
+import { SET_AUTH_TOKEN } from '../actionTypes';
 
-export const setToken = (toke) => ({
+export const setToken = (token) => ({
   type: SET_AUTH_TOKEN,
   token,
 });

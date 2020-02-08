@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 
-import imageGenerator from './imageGenerator'
-import auth from './auth'
+import imageGenerator from './imageGenerator';
+import auth from './auth';
 
 
 export default combineReducers({
