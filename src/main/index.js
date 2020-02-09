@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
 import { IconButton, Fab } from "@material-ui/core";
-import { Create, GetApp } from "@material-ui/icons";
+import { GetApp } from "@material-ui/icons";
 import shortid from "shortid";
-import { DndProvider } from "react-dnd";
-import Backend from "react-dnd-html5-backend";
-import domtoimage from "dom-to-image";
+import Add from "@material-ui/icons/Add";
 
 import api from "../services/api";
-import SelectOrientation from "../Components/SelectOrientation";
-import SelectCategories from "../Components/SelectCategories";
-import SelectBackground from "../Components/SelectBackground";
-import TextContainer from "../Components/TextSetup/TextContainer";
-import FilterSetup from "../Components/FilterColor/FilterSetup";
-import FilterOverlay from "../Components/FilterColor/FilterOverlay";
-import DragAndDropText from "../Components/TextSetup/DragAndDropText";
+import SelectOrientation from "../components/SelectOrientation";
+import SelectCategories from "../components/SelectCategories";
+import SelectBackground from "../components/SelectBackground";
 import { categoriesToQuery } from "../utils/categoriesToQuery";
-import Add from "@material-ui/icons/Add";
+import downloadImage from "../utils/downloadImage";
+
+import FilterWrapper from "../components/FilterSetup/FilterWrapper";
+import FilterContainer from "../components/FilterSetup/FilterContainer";
+import TextContainer from "../components/TextSetup/TextContainer";
+import TextWrapper from "../components/TextSetup/TextWrapper";
+import Text from "../components/TextSetup/Text";
+import ShapeContainer from "../components/ShapeSetup/ShapeContainer";
+import ShapeWrapper from "../components/ShapeSetup/ShapeWrapper";
+import Shape from "../components/ShapeSetup/Shape";
 
 import { pixabayKey } from "../config";
 
@@ -31,14 +34,16 @@ function Main() {
   const [backgrounds, setBackgrounds] = useState("");
   const [orientation, setOrientation] = useState("");
 
-  // Painel
+  // Control Panel
   const [panel, setPanel] = useState({
-    filter: true,
-    text: false
+    filter: false,
+    text: false,
+    shape: false
   });
-  const [texts, setTexts] = useState([]);
   const [filterColor, setFilterColor] = useState("#FFF");
   const [filterOpacity, setFilterOpacity] = useState(0.2);
+  const [texts, setTexts] = useState([]);
+  const [shapes, setShapes] = useState([]);
 
   useEffect(() => {
     localStorage.setItem("background", "");
@@ -57,17 +62,6 @@ function Main() {
     }
   }
 
-  const handleDownload = () => {
-    domtoimage
-      .toJpeg(document.getElementById("download"), { quality: 0.95 })
-      .then(function(dataUrl) {
-        var link = document.createElement("a");
-        link.download = "my-image-name.jpeg";
-        link.href = dataUrl;
-        link.click();
-      });
-  };
-
   const handleOrientation = orientation => {
     setOrientation(orientation);
     setShowSelectOrientation(false);
@@ -79,27 +73,11 @@ function Main() {
     setShowModalCategories(false);
   };
 
-  const reset = () => {
-    setShowSelectOrientation(true);
-  };
-
-  const handlePanel = name => event => {
-    setPanel({ ...panel, [name]: event.target.checked });
-  };
-
-  const handleFilterColor = color => {
-    setFilterColor(color.color);
-  };
-
-  const handleChangeFilterValue = (event, newValue) => {
-    setFilterOpacity(newValue);
-  };
-
   const handleAddText = () => {
     const newText = {
       id: shortid.generate(),
-      top: 180,
-      left: 200,
+      y: 180,
+      x: 200,
       title: "Novo texto...",
       color: "#000000",
       fontSize: 16,
@@ -115,12 +93,28 @@ function Main() {
     }
   };
 
+  const handleAddShape = () => {
+    const newShape = {
+      id: shortid.generate(),
+      background: "#FFF",
+      opacity: 1,
+      width: 120,
+      height: 120,
+      x: 180,
+      y: 200,
+      square: true,
+      circle: false
+    };
+
+    setShapes([...shapes, newShape]);
+
+    if (!panel.shape) {
+      setPanel({ ...panel, shape: true });
+    }
+  };
+
   return (
     <div className="App">
-      <button onClick={reset} className="reset">
-        Nova Imagem
-      </button>
-
       {showModalBackground && (
         <SelectBackground
           onClick={handleCloseBackgrounds}
@@ -142,13 +136,13 @@ function Main() {
             <aside className="aside">
               <div className="aside-item">
                 <span className="aside-title">Filtro</span>
-                <FilterSetup
-                  checked={panel.filter}
-                  color={filterColor}
-                  opacity={filterOpacity}
-                  onColorChange={handleFilterColor}
-                  onSwitchChange={handlePanel}
-                  onOpacityChange={handleChangeFilterValue}
+                <FilterContainer
+                  panel={panel}
+                  setPanel={setPanel}
+                  filterColor={filterColor}
+                  setFilterColor={setFilterColor}
+                  filterOpacity={filterOpacity}
+                  setFilterOpacity={setFilterOpacity}
                 />
               </div>
 
@@ -158,7 +152,7 @@ function Main() {
                   <IconButton
                     onClick={handleAddText}
                     color="primary"
-                    aria-label="add to shopping cart"
+                    aria-label="add text"
                     className="iconAddText"
                   >
                     <Add />
@@ -177,6 +171,28 @@ function Main() {
                   />
                 ))}
               </div>
+
+              <div className="aside-item item-middle">
+                <span className="aside-title-text">
+                  Formas
+                  <IconButton
+                    onClick={handleAddShape}
+                    color="primary"
+                    aria-label="add shape"
+                    className="iconAddText"
+                  >
+                    <Add />
+                  </IconButton>
+                </span>
+                {shapes.map((shape, index) => (
+                  <ShapeContainer
+                    key={shape.id}
+                    index={index}
+                    shapes={shapes}
+                    setShapes={setShapes}
+                  />
+                ))}
+              </div>
             </aside>
 
             <div className="panel">
@@ -191,19 +207,25 @@ function Main() {
                 }}
               >
                 {panel.filter && (
-                  <FilterOverlay color={filterColor} opacity={filterOpacity} />
+                  <FilterWrapper color={filterColor} opacity={filterOpacity} />
                 )}
 
                 {panel.text && (
-                  <DndProvider backend={Backend}>
-                    <DragAndDropText texts={texts} setTexts={setTexts} />
-                  </DndProvider>
+                  <TextWrapper>
+                    <Text texts={texts} setTexts={setTexts} />
+                  </TextWrapper>
+                )}
+
+                {panel.shape && (
+                  <ShapeWrapper>
+                    <Shape shapes={shapes} setShapes={setShapes} />
+                  </ShapeWrapper>
                 )}
               </div>
             </div>
 
             <Fab
-              onClick={handleDownload}
+              onClick={downloadImage}
               aria-label="Download"
               className="fab"
               color="primary"
