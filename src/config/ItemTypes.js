@@ -1,3 +1,4 @@
 export default {
-  BOX: 'box',
+  BOX: "box",
+  SHAPE: "shape"
 };
