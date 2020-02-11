@@ -2,18 +2,13 @@ import React from "react";
 import ColorPicker from "rc-color-picker";
 import Input from "../../General/Input";
 import { makeStyles } from "@material-ui/core/styles";
-import {
-  Tooltip,
-  Select,
-  MenuItem,
-  IconButton,
-  OutlinedInput
-} from "@material-ui/core";
+import { Select, MenuItem, IconButton, OutlinedInput } from "@material-ui/core";
 import Delete from "@material-ui/icons/Delete";
 import Bold from "@material-ui/icons/FormatBold";
 import Italic from "@material-ui/icons/FormatItalic";
 import Underline from "@material-ui/icons/FormatUnderlined";
 import "./styles.css";
+import TextFont from "../TextFont";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -145,6 +140,9 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
           <MenuItem value={42}>42</MenuItem>
           <MenuItem value={44}>44</MenuItem>
         </Select>
+        <div className={classes.fontWrapper}>
+          <TextFont />
+        </div>
         <div className="formatWrapper">
           <IconButton
             color={texts[index].fontWeight === "bold" ? "primary" : "default"}
