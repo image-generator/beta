@@ -2,6 +2,10 @@ import React, { useState } from "react";
 import { Popover, IconButton } from "@material-ui/core";
 import FontDownload from "@material-ui/icons/FontDownload";
 import { makeStyles } from "@material-ui/core/styles";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import fonts from "../../../config/fonts";
+import shortid from "shortid";
+import IconAction from "../../General/IconAction";
 
 const useStyles = makeStyles({
   wrapper: {
@@ -10,7 +14,7 @@ const useStyles = makeStyles({
     justifyContent: "space-between",
     marginBottom: 15
   },
-  shapeWrapper: {
+  fontWrapper: {
     display: "flex",
     justifyContent: "space-around",
     alignItems: "center"
@@ -26,10 +30,25 @@ const useStyles = makeStyles({
   },
   closeButton: {
     marginRight: -15
+  },
+  paper: {
+    maxHeight: 250
+  },
+  list: {
+    padding: "10px 15px",
+    listStyle: "none",
+    margin: 0
+  },
+  item: {
+    cursor: "pointer",
+    transition: "backgroundColor 0.2s",
+    "&:hover": {
+      backgroundColor: "#efefef"
+    }
   }
 });
 
-const TextFont = () => {
+const TextFont = ({ index, texts, setTexts }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const classes = useStyles();
 
@@ -44,12 +63,21 @@ const TextFont = () => {
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
 
+  const handleSelectFont = font => {
+    const newTexts = texts;
+    newTexts[index].fontFamily = font.font;
+    setTexts([...newTexts]);
+    handleClose();
+  };
+
   return (
     <>
-      <IconButton aria-label="bold" onClick={handleClick}>
+      <IconAction action={handleClick}>
         <FontDownload className={classes.icon} />
-      </IconButton>
+        <ArrowDropDownIcon className={classes.icon} />
+      </IconAction>
       <Popover
+        classes={{ paper: classes.paper }}
         id={id}
         open={open}
         anchorEl={anchorEl}
@@ -63,7 +91,20 @@ const TextFont = () => {
           horizontal: "center"
         }}
       >
-        <div className={classes.shapeWrapper}></div>
+        <div className={classes.fontWrapper}>
+          <ul className={classes.list}>
+            {fonts.map(font => (
+              <li
+                key={shortid.generate()}
+                className={classes.item}
+                style={{ fontFamily: font.font }}
+                onClick={() => handleSelectFont(font)}
+              >
+                {font.font}
+              </li>
+            ))}
+          </ul>
+        </div>
       </Popover>
     </>
   );

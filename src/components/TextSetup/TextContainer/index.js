@@ -141,7 +141,7 @@ const TextContainer = ({ index, text, color, texts, setTexts }) => {
           <MenuItem value={44}>44</MenuItem>
         </Select>
         <div className={classes.fontWrapper}>
-          <TextFont />
+          <TextFont texts={texts} setTexts={setTexts} index={index} />
         </div>
         <div className="formatWrapper">
           <IconButton

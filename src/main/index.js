@@ -20,6 +20,9 @@ import ShapeContainer from "../components/ShapeSetup/ShapeContainer";
 import ShapeWrapper from "../components/ShapeSetup/ShapeWrapper";
 import Shape from "../components/ShapeSetup/Shape";
 
+import GoogleFontLoader from "../utils/GoogleFontLoader";
+import fonts from "../config/fonts";
+
 import { pixabayKey } from "../config";
 
 import "./styles.css";
@@ -83,7 +86,8 @@ function Main() {
       fontSize: 16,
       fontWeight: "normal",
       fontStyle: "normal",
-      textDecoration: "none"
+      textDecoration: "none",
+      fontFamily: 'Roboto',
     };
 
     setTexts([...texts, newText]);
@@ -115,6 +119,11 @@ function Main() {
 
   return (
     <div className="App">
+
+      <GoogleFontLoader
+        fonts={fonts}
+      />
+
       {showModalBackground && (
         <SelectBackground
           onClick={handleCloseBackgrounds}

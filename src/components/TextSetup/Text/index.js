@@ -22,7 +22,8 @@ const Text = ({ texts, setTexts }) => {
             fontSize: text.fontSize,
             fontWeight: text.fontWeight,
             fontStyle: text.fontStyle,
-            textDecoration: text.textDecoration
+            textDecoration: text.textDecoration,
+            fontFamily: text.fontFamily
           }}
           key={text.id}
           position={{
