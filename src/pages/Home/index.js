@@ -10,6 +10,7 @@ import SelectCategories from '../../components/SelectCategories';
 import SelectBackground from '../../components/SelectBackground';
 import { categoriesToQuery } from '../../utils/categoriesToQuery';
 import downloadImage from '../../utils/downloadImage';
+import GoogleFontLoader from '../../utils/GoogleFontLoader';
 
 import FilterWrapper from '../../components/FilterSetup/FilterWrapper';
 import FilterContainer from '../../components/FilterSetup/FilterContainer';
@@ -23,7 +24,8 @@ import Shape from '../../components/ShapeSetup/Shape';
 import { pixabayKey } from '../../config';
 
 import './styles.css';
-import 'rc-color-picker/assets/index.css';
+import '../../styles/colorPicker.css';
+import fonts from '../../config/fonts';
 
 function Home() {
   const [showSelectOrientation, setShowSelectOrientation] = useState(true);
@@ -84,6 +86,8 @@ function Home() {
       fontWeight: 'normal',
       fontStyle: 'normal',
       textDecoration: 'none',
+      textTransform: 'none',
+      fontFamily: 'Roboto',
     };
 
     setTexts([...texts, newText]);
@@ -115,6 +119,8 @@ function Home() {
 
   return (
     <div className="App">
+      <GoogleFontLoader fonts={fonts} />
+
       {showModalBackground && (
         <SelectBackground
           onClick={handleCloseBackgrounds}
@@ -200,7 +206,7 @@ function Home() {
                 id="download"
                 className={`${'canvas'} ${
                   orientation === 'horizontal' ? 'portrait' : 'landscape'
-                }`}
+                  }`}
                 style={{
                   background: `url('${localStorage.getItem('background')}')`,
                   backgroundSize: 'cover',
