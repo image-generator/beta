@@ -1,63 +1,62 @@
-import React, { useState, useEffect } from "react";
-import { IconButton, Fab } from "@material-ui/core";
-import { GetApp } from "@material-ui/icons";
-import shortid from "shortid";
-import Add from "@material-ui/icons/Add";
+import React, { useState, useEffect } from 'react';
+import { IconButton, Fab } from '@material-ui/core';
+import { GetApp } from '@material-ui/icons';
+import shortid from 'shortid';
+import Add from '@material-ui/icons/Add';
 
-import api from "../services/api";
-import SelectOrientation from "../components/SelectOrientation";
-import SelectCategories from "../components/SelectCategories";
-import SelectBackground from "../components/SelectBackground";
-import { categoriesToQuery } from "../utils/categoriesToQuery";
-import downloadImage from "../utils/downloadImage";
+import api from '../../services/api';
+import SelectOrientation from '../../components/SelectOrientation';
+import SelectCategories from '../../components/SelectCategories';
+import SelectBackground from '../../components/SelectBackground';
+import { categoriesToQuery } from '../../utils/categoriesToQuery';
+import downloadImage from '../../utils/downloadImage';
+import GoogleFontLoader from '../../utils/GoogleFontLoader';
 
-import FilterWrapper from "../components/FilterSetup/FilterWrapper";
-import FilterContainer from "../components/FilterSetup/FilterContainer";
-import TextContainer from "../components/TextSetup/TextContainer";
-import TextWrapper from "../components/TextSetup/TextWrapper";
-import Text from "../components/TextSetup/Text";
-import ShapeContainer from "../components/ShapeSetup/ShapeContainer";
-import ShapeWrapper from "../components/ShapeSetup/ShapeWrapper";
-import Shape from "../components/ShapeSetup/Shape";
+import FilterWrapper from '../../components/FilterSetup/FilterWrapper';
+import FilterContainer from '../../components/FilterSetup/FilterContainer';
+import TextContainer from '../../components/TextSetup/TextContainer';
+import TextWrapper from '../../components/TextSetup/TextWrapper';
+import Text from '../../components/TextSetup/Text';
+import ShapeContainer from '../../components/ShapeSetup/ShapeContainer';
+import ShapeWrapper from '../../components/ShapeSetup/ShapeWrapper';
+import Shape from '../../components/ShapeSetup/Shape';
 
-import GoogleFontLoader from "../utils/GoogleFontLoader";
-import fonts from "../config/fonts";
+import { pixabayKey } from '../../config';
 
-import { pixabayKey } from "../config";
+import './styles.css';
+import '../../styles/colorPicker.css';
+import fonts from '../../config/fonts';
 
-import "./styles.css";
-import "rc-color-picker/assets/index.css";
-
-function Main() {
+function Home() {
   const [showSelectOrientation, setShowSelectOrientation] = useState(true);
   const [showModalCategories, setShowModalCategories] = useState(false);
   const [showPanel, setShowPanel] = useState(false);
   const [showModalBackground, setShowModalBackground] = useState(false);
 
-  const [backgrounds, setBackgrounds] = useState("");
-  const [orientation, setOrientation] = useState("");
+  const [backgrounds, setBackgrounds] = useState('');
+  const [orientation, setOrientation] = useState('');
 
   // Control Panel
   const [panel, setPanel] = useState({
     filter: false,
     text: false,
-    shape: false
+    shape: false,
   });
-  const [filterColor, setFilterColor] = useState("#FFF");
+  const [filterColor, setFilterColor] = useState('#FFF');
   const [filterOpacity, setFilterOpacity] = useState(0.2);
   const [texts, setTexts] = useState([]);
   const [shapes, setShapes] = useState([]);
 
   useEffect(() => {
-    localStorage.setItem("background", "");
+    localStorage.setItem('background', '');
   }, []);
 
   async function handleImageBackground(data) {
-    if (backgrounds === "") {
+    if (backgrounds === '') {
       const response = await api.get(
         `?key=${pixabayKey}&q=${categoriesToQuery(
-          data.selectedOption
-        )}&orientation=${orientation}&image_type=photo&pretty=true`
+          data.selectedOption,
+        )}&orientation=${orientation}&image_type=photo&pretty=true`,
       );
       setBackgrounds(response.data.hits);
       setShowModalBackground(true);
@@ -65,7 +64,7 @@ function Main() {
     }
   }
 
-  const handleOrientation = orientation => {
+  const handleOrientation = (orientation) => {
     setOrientation(orientation);
     setShowSelectOrientation(false);
     setShowModalCategories(true);
@@ -81,12 +80,13 @@ function Main() {
       id: shortid.generate(),
       y: 180,
       x: 200,
-      title: "Novo texto...",
-      color: "#000000",
+      title: 'Novo texto...',
+      color: '#000000',
       fontSize: 16,
-      fontWeight: "normal",
-      fontStyle: "normal",
-      textDecoration: "none",
+      fontWeight: 'normal',
+      fontStyle: 'normal',
+      textDecoration: 'none',
+      textTransform: 'none',
       fontFamily: 'Roboto',
     };
 
@@ -100,14 +100,14 @@ function Main() {
   const handleAddShape = () => {
     const newShape = {
       id: shortid.generate(),
-      background: "#FFF",
+      background: '#FFF',
       opacity: 1,
       width: 120,
       height: 120,
       x: 180,
       y: 200,
       square: true,
-      circle: false
+      circle: false,
     };
 
     setShapes([...shapes, newShape]);
@@ -119,10 +119,7 @@ function Main() {
 
   return (
     <div className="App">
-
-      <GoogleFontLoader
-        fonts={fonts}
-      />
+      <GoogleFontLoader fonts={fonts} />
 
       {showModalBackground && (
         <SelectBackground
@@ -207,12 +204,12 @@ function Main() {
             <div className="panel">
               <div
                 id="download"
-                className={`${"canvas"} ${
-                  orientation === "horizontal" ? "portrait" : "landscape"
-                }`}
+                className={`${'canvas'} ${
+                  orientation === 'horizontal' ? 'portrait' : 'landscape'
+                  }`}
                 style={{
-                  background: `url('${localStorage.getItem("background")}')`,
-                  backgroundSize: "cover"
+                  background: `url('${localStorage.getItem('background')}')`,
+                  backgroundSize: 'cover',
                 }}
               >
                 {panel.filter && (
@@ -248,4 +245,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default Home;
